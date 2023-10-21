@@ -9,9 +9,8 @@ router.get('/', (req, res) => res.send({response: 'users active'}));
 //Users Routes
 router.get('/users/index', usersController.index);
 router.post('/users/store', usersController.store);
-router.get('/users/show', usersController.show);
-router.put('/users/update', usersController.update);
-router.delete('/users/delete', usersController.forceDelete);
-router.post('/users/restore', usersController.restore);
+router.get('/users/show/:userId', usersController.show);
+router.put('/users/update/:userId', usersController.update);
+router.delete('/users/delete/:userId', usersController.forceDelete);
 
 export default router; 

@@ -1,21 +1,91 @@
+import mongoose from "mongoose";
 
-export const index = (req, res) => res.send({action: 'index'});
+import users from "../database/Model/users.js";
 
-export const store = (req, res) => {
+
+export const index = async (req, res) => {
+
+    const response = await users.find();
+
+    await res.send(response);
+}
+
+export const store = async (req, res) => {
     const {name, email, phone, password} = req.body;
 
+    const timeElapsed = Date.now();
+    const timeStamp = new Date(timeElapsed);
+    const today = timeStamp.toISOString();
+
+    const email_verified_at = today;
+    const createdAt = today;
+    const updatedAt = today;
+
+    const response = await users.create({
+        name: name,
+        email: email,
+        email_verified_at: email_verified_at,
+        password: password,
+        phone: phone,
+        createdAt: createdAt,
+        updatedAt: updatedAt
+    })
+
+    
     res.send({
         name: name,
         email: email,
+        email_verified_at: email_verified_at,
         password: password,
-        phone: phone
+        phone: phone,
+        createdAt: createdAt,
+        updatedAt: updatedAt
     });
+
 };
 
-export const show = (req, res) => res.send({action: 'show'});
+export const show = async (req, res) => {
 
-export const update = (req, res) => res.send({action: 'update'});
+    const user = {
+        '_id': req.params.userId
+    }
 
-export const forceDelete = (req, res) => res.send({action: 'delete'});
+    const response = await users.findOne(user);
 
-export const restore = (req, res) => res.send({action: 'restore'});
+    await res.send(response);
+
+};
+
+export const update = async (req, res) => {
+    const { name, email, password, phone } = req.body;
+
+    const user = {
+        '_id': req.params.userId
+    }
+
+    const response = await users.findById(user);
+
+    response.name = name;
+    response.email = email;
+    response.password = password;
+    response.phone = phone;
+
+    await response.save();
+    await res.send(response)
+
+
+
+
+}
+
+export const forceDelete = async (req, res) => {
+
+    const user = {
+        '_id': req.params.userId
+    };
+
+    const response = await users.deleteOne(user);
+    await res.send(response);
+
+}
+
