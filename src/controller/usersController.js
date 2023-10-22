@@ -72,10 +72,6 @@ export const update = async (req, res) => {
 
     await response.save();
     await res.send(response)
-
-
-
-
 }
 
 export const forceDelete = async (req, res) => {
@@ -86,6 +82,5 @@ export const forceDelete = async (req, res) => {
 
     const response = await users.deleteOne(user);
     await res.send(response);
-
 }
 
