@@ -3,6 +3,7 @@ import { Router } from "express";
 import * as usersController from '../controller/usersController.js'
 import * as postsController from '../controller/postsController.js'
 import * as categoriesController from '../controller/categoriesController.js'
+import * as commentsController from '../controller/commentsController.js'
 
 const router = Router();
 
@@ -28,6 +29,13 @@ router.post('/categories/store', categoriesController.store);
 router.get('/categories/show/:categoryId', categoriesController.show);
 router.put('/categories/update/:categoryId', categoriesController.update);
 router.delete('/categories/delete/:categoryId', categoriesController.forceDelete);
+
+//Comments Routes
+router.get('/comments/index', commentsController.index);
+router.post('/comments/store', commentsController.store);
+router.get('/comments/show/:commentId', commentsController.show);
+router.put('/comments/update/:commentId', commentsController.update);
+router.delete('/comments/delete/:commentId', commentsController.forceDelete);
 
 
 export default router; 

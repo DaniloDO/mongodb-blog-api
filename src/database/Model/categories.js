@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
 import categoriesSchema from "../Schema/categoriesSchema.js";
 
