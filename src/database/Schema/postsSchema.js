@@ -7,7 +7,8 @@ const postsSchema = new Schema({
     image: String,
     publishedAt: Date,
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
+    userId: [{type: Schema.Types.ObjectId, ref:'users'}]
 });
 
 export default postsSchema;
