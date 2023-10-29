@@ -1,16 +1,20 @@
 import mongoose from "mongoose";
 
 import posts from "../database/Model/posts.js";
+import users from "../database/Model/users.js";
 
 export const index = async (req, res) => {
-    const response = await posts.find();
+    const response = await posts.find().populate({
+        path: 'userId',
+        select: '_id name email phone'
+    });
 
     await res.send(response);
 
 }
 
 export const store = async (req, res) => {
-    const {title, description, content, image} = req.body;
+    const {title, description, content, image, userId} = req.body;
 
     const timeElapsed = Date.now();
     const timeStamp = new Date(timeElapsed);
@@ -27,7 +31,8 @@ export const store = async (req, res) => {
         image: image,
         publishedAt: publishedAt,
         createdAt: createdAt,
-        updatedAt: updatedAt
+        updatedAt: updatedAt,
+        userId: userId
     });
 
     await res.send(response);
@@ -40,13 +45,16 @@ export const show = async (req, res) => {
         '_id': req.params.postId
     }
 
-    const response = await posts.findOne(post);
+    const response = await posts.findOne(post).populate({
+        path: 'userId',
+        select: '_id name email phone'
+    });
 
     await res.send(response);
 }
 
 export const update = async (req, res) => {
-    const {title, description, content, image} = req.body; 
+    const {title, description, content, image, userId} = req.body; 
 
     const post = {
         '_id': req.params.postId
@@ -58,6 +66,7 @@ export const update = async (req, res) => {
     response.description = description;
     response.content = content;
     response.image = image;
+    response.userId = userId;
 
     await response.save();
     await res.send(response);
