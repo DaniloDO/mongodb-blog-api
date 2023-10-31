@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 import comments from "../database/Model/comments.js";
 
+//Show all the comments in the collection
 export const index = async (req, res) => {
     const response = await comments.find().populate({
         path: 'userId',
@@ -14,6 +15,7 @@ export const index = async (req, res) => {
     await res.send(response);
 };
 
+//Store a single comment in the collection 
 export const store = async (req, res) => {
     const { content, userId, postId } = req.body; 
 
@@ -33,6 +35,7 @@ export const store = async (req, res) => {
     await res.send(response);
 };
 
+//Show a unique comment in the collection
 export const show = async (req, res) => {
 
     const comment = {
@@ -50,6 +53,7 @@ export const show = async (req, res) => {
     await res.send(response);
 };
 
+//Update a single comment data in the collection
 export const update = async (req, res) => {
     const { content, userId, postId } = req.body;
 
@@ -68,6 +72,7 @@ export const update = async (req, res) => {
 
 };
 
+//Delete permanently a single comment in the collection
 export const forceDelete = async (req, res) => {
 
     const comment = {

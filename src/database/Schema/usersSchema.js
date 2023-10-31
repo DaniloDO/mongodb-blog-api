@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
+//Defines a Schema to create users model  
 const usersSchema = new Schema({
     name: String,
     email: String,

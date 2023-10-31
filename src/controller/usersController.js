@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 import users from "../database/Model/users.js";
 
-
+//Show all the users in the collection
 export const index = async (req, res) => {
 
     const response = await users.find();
@@ -10,7 +10,9 @@ export const index = async (req, res) => {
     await res.send(response);
 }
 
+//Store a single user in the collection 
 export const store = async (req, res) => {
+
     const {name, email, phone, password} = req.body;
 
     const timeElapsed = Date.now();
@@ -31,7 +33,6 @@ export const store = async (req, res) => {
         updatedAt: updatedAt
     })
 
-    
     res.send({
         name: name,
         email: email,
@@ -44,6 +45,7 @@ export const store = async (req, res) => {
 
 };
 
+//Show a unique user in the collection
 export const show = async (req, res) => {
 
     const user = {
@@ -56,7 +58,9 @@ export const show = async (req, res) => {
 
 };
 
+//Update a single user data in the collection
 export const update = async (req, res) => {
+
     const { name, email, password, phone } = req.body;
 
     const user = {
@@ -71,9 +75,11 @@ export const update = async (req, res) => {
     response.phone = phone;
 
     await response.save();
+
     await res.send(response)
 }
 
+//Delete permanently a single user in the collection
 export const forceDelete = async (req, res) => {
 
     const user = {
@@ -81,6 +87,7 @@ export const forceDelete = async (req, res) => {
     };
 
     const response = await users.deleteOne(user);
+
     await res.send(response);
 }
 

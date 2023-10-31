@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
+//Defines a Schema to create posts model  
 const postsSchema = new Schema({
     title: String,
     description: String,

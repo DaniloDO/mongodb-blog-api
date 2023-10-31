@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
+//Defines a Schema to create comments model  
 const commentsSchema = new Schema({
     content: String,
     createdAt: Date,
