@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 import posts from "../database/Model/posts.js";
 import users from "../database/Model/users.js";
 
+//Show all the posts in the collection
 export const index = async (req, res) => {
+
     const response = await posts.find().populate({
         path: 'userId',
         select: '_id name email phone'
@@ -13,7 +15,9 @@ export const index = async (req, res) => {
 
 }
 
+//Store a single post in the collection 
 export const store = async (req, res) => {
+
     const {title, description, content, image, userId} = req.body;
 
     const timeElapsed = Date.now();
@@ -40,6 +44,7 @@ export const store = async (req, res) => {
 
 };
 
+//Show a unique post in the collection
 export const show = async (req, res) => {
     const post = {
         '_id': req.params.postId
@@ -53,6 +58,7 @@ export const show = async (req, res) => {
     await res.send(response);
 }
 
+//Update a single post data in the collection
 export const update = async (req, res) => {
     const {title, description, content, image, userId} = req.body; 
 
@@ -72,6 +78,7 @@ export const update = async (req, res) => {
     await res.send(response);
 }
 
+//Delete permanently a single post in the collection
 export const forceDelete = async (req, res) => {
 
     const post = {

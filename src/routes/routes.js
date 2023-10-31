@@ -5,8 +5,10 @@ import * as postsController from '../controller/postsController.js'
 import * as categoriesController from '../controller/categoriesController.js'
 import * as commentsController from '../controller/commentsController.js'
 
+//Define router object to handle routes
 const router = Router();
 
+//Router landing page
 router.get('/', (req, res) => res.send({response: 'users active'}));
 
 //Users Routes

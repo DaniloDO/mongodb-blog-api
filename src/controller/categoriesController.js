@@ -2,12 +2,14 @@ import mongoose from "mongoose";
 
 import categories from "../database/Model/categories.js";
 
+//Show all the categories in the collection
 export const index = async (req, res) => {
     const response = await categories.find();
 
     await res.send(response);
 };
 
+//Store a single category in the collection 
 export const store = async (req, res) => {
     const { name, image } = req.body; 
 
@@ -26,6 +28,7 @@ export const store = async (req, res) => {
     await res.send(response);
 };
 
+//Show a unique comment in the collection
 export const show = async (req, res) => {
 
     const category = {
@@ -37,6 +40,7 @@ export const show = async (req, res) => {
     await res.send(response);
 };
 
+//Update a single comment data in the collection
 export const update = async (req, res) => {
     const { name, image } = req.body;
 
@@ -54,6 +58,7 @@ export const update = async (req, res) => {
 
 };
 
+//Delete permanently a single comment in the collection
 export const forceDelete = async (req, res) => {
 
     const categoty = {
