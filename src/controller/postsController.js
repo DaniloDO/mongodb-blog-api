@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 
 import posts from "../database/Model/posts.js";
 import users from "../database/Model/users.js";
+import errorSearch from "../handlers/errorSearch.js";
+import errorValidation from "../handlers/errorValidation.js";
 
 //Show all the posts in the collection
 export const index = async (req, res) => {
@@ -28,20 +30,26 @@ export const store = async (req, res) => {
     const updatedAt = today;
     const publishedAt = today;
 
-    const response = await posts.create({
-        title: title,
-        description: description,
-        content: content,
-        image: image,
-        publishedAt: publishedAt,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-        userId: userId
-    });
+    try {
+        const response = await posts.create({
+            title: title,
+            description: description,
+            content: content,
+            image: image,
+            publishedAt: publishedAt,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            userId: userId
+        });
+    
+        await res.send(response);
+    }
 
-    await res.send(response);
-
-
+    catch (err) {
+        const errorMessage = errorValidation(err);
+        res.status(400).send(errorMessage);
+        return
+    }
 };
 
 //Show a unique post in the collection
@@ -50,12 +58,20 @@ export const show = async (req, res) => {
         '_id': req.params.postId
     }
 
-    const response = await posts.findOne(post).populate({
-        path: 'userId',
-        select: '_id name email phone'
-    });
+    try {
+        const response = await posts.findOne(post).populate({
+            path: 'userId',
+            select: '_id name email phone'
+        });
+    
+        await res.send(response);
+    }
 
-    await res.send(response);
+    catch (err) {
+        const errorMessage = errorSearch(err);
+        res.status(400).send(errorMessage);
+        return
+    }
 }
 
 //Update a single post data in the collection
@@ -66,7 +82,15 @@ export const update = async (req, res) => {
         '_id': req.params.postId
     }
 
-    const response = await posts.findById(post);
+    try {
+        const response = await posts.findById(post);
+    }
+
+    catch (err) {
+        const errorMessage = errorSearch(err);
+        res.status(400).send(errorMessage);
+        return 
+    }
 
     response.title = title;
     response.description = description;
@@ -74,8 +98,16 @@ export const update = async (req, res) => {
     response.image = image;
     response.userId = userId;
 
-    await response.save();
-    await res.send(response);
+    try {
+        await response.save();
+        await res.send(response);
+    }
+
+    catch (err) {
+        const errorMessage = errorValidation(err)
+        res.status(400).send(errorMessage);
+        return
+    }
 }
 
 //Delete permanently a single post in the collection
@@ -85,6 +117,14 @@ export const forceDelete = async (req, res) => {
         '_id': req.params.postId
     }
 
-    const response = await posts.deleteOne(post);
-    await res.send(response);
+    try {
+        const response = await posts.deleteOne(post);
+        await res.send(response);
+    }
+
+    catch (err) {
+        const errorMessage = errorSearch(err)
+        res.status(400).send(errorMessage);
+        return
+    }
 }
