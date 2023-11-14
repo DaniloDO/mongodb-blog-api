@@ -35,16 +35,8 @@ export const store = async (req, res) => {
             createdAt: createdAt,
             updatedAt: updatedAt
         })
-    
-        res.send({
-            name: name,
-            email: email,
-            email_verified_at: email_verified_at,
-            password: password,
-            phone: phone,
-            createdAt: createdAt,
-            updatedAt: updatedAt
-        });
+
+        await res.send(response);
     }
 
     catch (err) {
@@ -84,28 +76,27 @@ export const update = async (req, res) => {
 
     try {
         const response = await users.findById(user);
+        response.name = name;
+        response.email = email;
+        response.password = password;
+        response.phone = phone;
+    
+        try {
+            await response.save();
+            await res.send(response)
+        }
+    
+        catch (err) {
+            const errorMessage = errorValidation(err)
+            res.status(400).send(errorMessage);
+            return
+        }
     }
 
     catch (err) {
         const errorMessage = errorSearch(err);
         res.status(400).send(errorMessage);
         return 
-    }
-
-    response.name = name;
-    response.email = email;
-    response.password = password;
-    response.phone = phone;
-
-    try {
-        await response.save();
-        await res.send(response)
-    }
-
-    catch (err) {
-        const errorMessage = errorValidation(err)
-        res.status(400).send(errorMessage);
-        return
     }
 }
 

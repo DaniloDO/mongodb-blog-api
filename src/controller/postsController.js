@@ -84,29 +84,28 @@ export const update = async (req, res) => {
 
     try {
         const response = await posts.findById(post);
+        response.title = title;
+        response.description = description;
+        response.content = content;
+        response.image = image;
+        response.userId = userId;
+    
+        try {
+            await response.save();
+            await res.send(response);
+        }
+    
+        catch (err) {
+            const errorMessage = errorValidation(err)
+            res.status(400).send(errorMessage);
+            return
+        }
     }
 
     catch (err) {
         const errorMessage = errorSearch(err);
         res.status(400).send(errorMessage);
         return 
-    }
-
-    response.title = title;
-    response.description = description;
-    response.content = content;
-    response.image = image;
-    response.userId = userId;
-
-    try {
-        await response.save();
-        await res.send(response);
-    }
-
-    catch (err) {
-        const errorMessage = errorValidation(err)
-        res.status(400).send(errorMessage);
-        return
     }
 }
 
