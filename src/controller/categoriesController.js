@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
 import categories from "../database/Model/categories.js";
+import errorSearch from "../handlers/errorSearch.js";
+import errorValidation from "../handlers/errorValidation.js";
 
 //Show all the categories in the collection
 export const index = async (req, res) => {
@@ -20,12 +22,22 @@ export const store = async (req, res) => {
     const createdAt = today;
     const updatedAt = today;
 
-    const response = await categories.create({
-        name: name,
-        image: image
-    });
+    try {
+        const response = await categories.create({
+            name: name,
+            image: image,
+            createdAt: createdAt,
+            updatedAt: updatedAt
+        });
+    
+        await res.send(response);
+    }
 
-    await res.send(response);
+    catch (err) {
+        const errorMessage = errorValidation(err);
+        res.status(400).send(errorMessage);
+        return 
+    }
 };
 
 //Show a unique comment in the collection
@@ -35,9 +47,18 @@ export const show = async (req, res) => {
         '_id': req.params.categoryId
     }
 
-    const response = await categories.findOne(category);
+    try {
+        const response = await categories.findOne(category);
+        await res.send(response);
+    }
 
-    await res.send(response);
+    catch (err) {
+        const errorMessage = errorSearch(err);
+        res.status(400).send(errorMessage);
+        return 
+    }
+
+
 };
 
 //Update a single comment data in the collection
@@ -48,13 +69,28 @@ export const update = async (req, res) => {
         '_id': req.params.categoryId
     }
 
-    const response = await categories.findById(category);
+    try {
+        const response = await categories.findById(category);
+        response.name = name;
+        response.image = image;
 
-    response.name = name;
-    response.image = image;
+        try {
+            await response.save();
+            await res.send(response);
+        }
 
-    await response.save();
-    await res.send(response);
+        catch (err) {
+            const errorMessage = errorValidation(err)
+            res.status(400).send(errorMessage);
+            return
+        }
+    }
+
+    catch (err) {
+        const errorMessage = errorSearch(err);
+        res.status(400).send(errorMessage);
+        return
+    }
 
 };
 
@@ -65,6 +101,14 @@ export const forceDelete = async (req, res) => {
         '_id': req.params.categoryId
     }
 
-    const response = await categories.deleteOne(categoty);
-    await res.send(response);
+    try {
+        const response = await categories.deleteOne(categoty);
+        await res.send(response);
+    }
+
+    catch (err) {
+        const errorMessage = errorSearch(err)
+        res.status(400).send(errorMessage);
+        return
+    }
 };
