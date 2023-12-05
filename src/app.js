@@ -2,7 +2,6 @@ import express  from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 
-import router from "./routes/routes.js";
 import connection from "./database/Config.js";
 import usersRouter from "./routes/usersRoutes.js";
 import postsRouter from "./routes/postsRoutes.js";

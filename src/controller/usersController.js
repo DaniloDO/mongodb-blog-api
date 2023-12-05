@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
+import jwt from "jsonwebtoken";
 
 import users from "../database/Model/users.js";
 import errorValidation from "../handlers/errorValidation.js";
 import errorSearch from "../handlers/errorSearch.js";
+
 
 //Show all the users in the collection
 export const index = async (req, res) => {
@@ -68,7 +71,7 @@ export const show = async (req, res) => {
 //Update a single user data in the collection
 export const update = async (req, res) => {
 
-    const { name, email, password, phone } = req.body;
+    const {name, email, password, phone} = req.body;
 
     const user = {
         '_id': req.params.userId
@@ -119,3 +122,32 @@ export const forceDelete = async (req, res) => {
     }
 }
 
+//User authentication
+export const login = async (req, res) => {
+
+    const {email, password} = req.body;
+
+    const user = {
+        'email': email,
+    };
+
+    try {
+        const response = await users.findOne(user);
+
+        if(response.password === password) {
+            const token = jwt.sign({'user': response.id}, 'secretKey', {expiresIn: 60});
+            await res.cookie('jwt', token, {httpOnly: true, maxAge: 1000 * 60});
+            await res.send(token);
+        }
+        else {
+            res.status(400).send({'users': 'incorrect password'});
+            return
+        }
+    }
+
+    catch(err) {
+        const errorMessage = errorSearch(err);
+        res.status(400).send(errorMessage);
+        return
+    }
+}
